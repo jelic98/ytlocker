@@ -2,18 +2,22 @@ package com.ecloga.ytlocker;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MotionEventCompat;
+import android.util.DisplayMetrics;
 import android.view.*;
-import android.widget.ImageView;
+import android.view.animation.*;
+import android.widget.*;
 
 public class MainService extends Service {
 
-    private ImageView black, transparent;
+    private ImageView black;
+    private TextView tvInfo;
     private WindowManager windowManager;
-    private float lastX, lastY;
+    private FrameLayout layout;
 
     @Nullable
     @Override
@@ -27,22 +31,49 @@ public class MainService extends Service {
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
+        layout = new FrameLayout(this);
+
+        FrameLayout.LayoutParams flParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER);
+
         black = new ImageView(this);
-        black.setImageResource(R.drawable.black);
+        black.setImageResource(com.ecloga.ytlocker.R.drawable.black);
+
+
+        DisplayMetrics metrics;
+        metrics = getApplicationContext().getResources().getDisplayMetrics();
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/timeburnernormal.ttf");
+
+        tvInfo = new TextView(this);
+        tvInfo.setText("Hold to unlock");
+        tvInfo.setTextColor(Color.parseColor("#ecf0f1"));
+        tvInfo.setTypeface(font);
+
+        float Textsize = tvInfo.getTextSize() / metrics.density;
+        tvInfo.setTextSize(Textsize + 15);
+
+        layout.addView(black);
+        layout.addView(tvInfo, flParams);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.LEFT;
         params.x = 0;
         params.y = 0;
 
-        windowManager.addView(black, params);
+        windowManager.addView(layout, params);
+
+        Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        black.startAnimation(fadeIn);
 
         black.getLayoutParams().height = windowManager.getDefaultDisplay().getHeight();
         black.getLayoutParams().width = windowManager.getDefaultDisplay().getWidth();
@@ -60,25 +91,6 @@ public class MainService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        windowManager.removeView(black);
-
-        transparent = new ImageView(this);
-        transparent.setImageResource(R.drawable.transparent);
-
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                PixelFormat.TRANSLUCENT);
-
-        params.gravity = Gravity.TOP | Gravity.LEFT;
-        params.x = 0;
-        params.y = 0;
-
-        windowManager.addView(transparent, params);
-
-        transparent.getLayoutParams().height = windowManager.getDefaultDisplay().getHeight();
-        transparent.getLayoutParams().width = windowManager.getDefaultDisplay().getWidth();
+        windowManager.removeView(layout);
     }
 }
