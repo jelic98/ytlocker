@@ -1,13 +1,22 @@
 package com.ecloga.ytlocker;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.*;
 import android.view.animation.*;
 import android.widget.*;
@@ -18,7 +27,6 @@ public class MainService extends Service {
     private TextView tvInfo;
     private WindowManager windowManager;
     private FrameLayout layout;
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,7 +49,6 @@ public class MainService extends Service {
         black = new ImageView(this);
         black.setImageResource(com.ecloga.ytlocker.R.drawable.black);
 
-
         DisplayMetrics metrics;
         metrics = getApplicationContext().getResources().getDisplayMetrics();
 
@@ -63,7 +70,8 @@ public class MainService extends Service {
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                        WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -81,7 +89,26 @@ public class MainService extends Service {
         black.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                stopSelf();
+                Handler handler = new Handler();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        stopSelf();
+                    }
+                }, 500);
+
+                return false;
+            }
+        });
+
+        black.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                    Toast.makeText(getApplicationContext(), "asd", Toast.LENGTH_LONG).show();
+                }
+
                 return false;
             }
         });

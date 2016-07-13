@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/timeburnernormal.ttf");
+
         final Button btnToggle = (Button) findViewById(R.id.btnToggle);
         btnToggle.setTypeface(font);
         btnToggle.setTextColor(Color.parseColor("#ecf0f1"));
@@ -32,8 +34,16 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics metrics;
         metrics = getApplicationContext().getResources().getDisplayMetrics();
         float Textsize = btnToggle.getTextSize() / metrics.density;
-        btnToggle.setTextSize(Textsize + 7);
+        btnToggle.setTextSize(Textsize + 8);
 
+        TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
+        TextView tvAuthor = (TextView) findViewById(R.id.tvAuthor);
+
+        tvTitle.setTypeface(font);
+        tvAuthor.setTypeface(font);
+
+        tvTitle.setTextSize(Textsize + 20);
+        tvAuthor.setTextSize(Textsize + 2);
 
         int height = metrics.heightPixels;
         int width = metrics.widthPixels;

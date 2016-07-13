@@ -3,7 +3,8 @@
           package="com.ecloga.ytlocker">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
     <application
             android:allowBackup="true"
@@ -12,13 +13,13 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <service android:enabled="true" android:name=".MainService" />
+        <service android:name=".MainService" android:enabled="true" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
