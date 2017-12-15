@@ -1,4 +1,4 @@
-package com.ecloga.ytlocker;
+package org.ecloga.ytlocker;
 
 import android.app.Notification;
 import android.app.NotificationManager;

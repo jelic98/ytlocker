@@ -1,4 +1,4 @@
-package com.ecloga.ytlocker;
+package org.ecloga.ytlocker;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -47,7 +47,7 @@ public class MainService extends Service {
                 Gravity.CENTER);
 
         black = new ImageView(this);
-        black.setImageResource(com.ecloga.ytlocker.R.drawable.black);
+        black.setImageResource(R.drawable.black);
 
         DisplayMetrics metrics;
         metrics = getApplicationContext().getResources().getDisplayMetrics();
@@ -74,7 +74,7 @@ public class MainService extends Service {
                         WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.gravity = Gravity.TOP | Gravity.START;
         params.x = 0;
         params.y = 0;
 

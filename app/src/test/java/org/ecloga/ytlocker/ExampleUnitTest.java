@@ -1,4 +1,4 @@
-package com.ecloga.ytlocker;
+package org.ecloga.ytlocker;
 
 import org.junit.Test;
 

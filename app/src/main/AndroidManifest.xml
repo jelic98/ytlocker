@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.ecloga.ytlocker">
+          package="org.ecloga.ytlocker">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -15,7 +15,7 @@
 
         <service android:name=".MainService" android:enabled="true" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name="org.ecloga.ytlocker.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
