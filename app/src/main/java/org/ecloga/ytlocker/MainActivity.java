@@ -1,16 +1,18 @@
 package org.ecloga.ytlocker;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.animation.Animation;
@@ -62,19 +64,15 @@ public class MainActivity extends AppCompatActivity {
             btnToggle.setBackground(getResources().getDrawable(R.drawable.start));
         }
 
-        PendingIntent pi = PendingIntent.getService(MainActivity.this,
-                0, new Intent(MainActivity.this, MainService.class), 0);
-
-        final Notification notification = new NotificationCompat.Builder(MainActivity.this)
+        final Notification notification = new NotificationCompat.Builder(MainActivity.this, "55555")
                 .setTicker("YTLocker")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("YTLocker")
                 .setContentText("Click this to block touches")
-                .setContentIntent(pi)
+                .setContentIntent(PendingIntent.getService(this,
+                        0, new Intent(this, MainService.class), 0))
                 .setOngoing(true)
                 .build();
-
-        final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         btnToggle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,18 +80,29 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 Animation zoom = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.zoom);
 
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                if(Build.VERSION.SDK_INT >= 26) {
+                    NotificationChannel channel =
+                            new NotificationChannel("55555", "YTLocker", NotificationManager.IMPORTANCE_LOW);
+                    channel.enableLights(true);
+                    channel.setLightColor(Color.BLUE);
+                    channel.setShowBadge(false);
+                    manager.createNotificationChannel(channel);
+                }
+
                 if(btnToggle.getText() == "Start") {
                     btnToggle.setText("Stop");
                     btnToggle.setBackground(getResources().getDrawable(R.drawable.stop));
 
-                    notificationManager.notify(21098, notification);
+                    manager.notify(55555, notification);
 
                     editor.putString("started", "true");
                 }else {
                     btnToggle.setText("Start");
                     btnToggle.setBackground(getResources().getDrawable(R.drawable.start));
 
-                    notificationManager.cancel(21098);
+                    manager.cancel(55555);
 
                     editor.putString("started", "false");
                 }
